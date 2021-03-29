@@ -1,0 +1,25 @@
+package CSCI5308.GroupFormationTool;
+
+import CSCI5308.GroupFormationTool.AccessControl.AbstractAclDependencyFactory;
+import CSCI5308.GroupFormationTool.Courses.AbstractCourseDependencyFactory;
+import CSCI5308.GroupFormationTool.Database.AbstractDbDependencyFactory;
+import CSCI5308.GroupFormationTool.PasswordValidation.AbstractPasswordValidatorDependencyFactory;
+import CSCI5308.GroupFormationTool.QuestionManager.AbstractQuestionDependencyFactory;
+import CSCI5308.GroupFormationTool.Security.AbstractSecurityFactory;
+import CSCI5308.GroupFormationTool.Survey.AbstractSurveyDependencyFactory;
+
+public interface IGlobalFactoryProvider {
+	AbstractAclDependencyFactory getAclDependencyFactory();
+
+	AbstractDbDependencyFactory getDbDependencyFactory();
+
+	AbstractCourseDependencyFactory getCourseDependencyFactory();
+
+	AbstractPasswordValidatorDependencyFactory getPasswordValidatorDependencyFactory();
+
+	AbstractQuestionDependencyFactory getQuestionDependencyFactory();
+
+	AbstractSurveyDependencyFactory getSurveyDependencyFactory();
+
+	AbstractSecurityFactory getSecurityFactory();
+}

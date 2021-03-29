@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+tr{padding: 10px;}
+</style>
+<meta charset="UTF-8">
+<title>Formed Groups - <span th:text=${surveyTitle}></span></title>
+<link th:href="@{/styles/cssandjs/main.css}" rel="stylesheet" />
+</head>
+<body>
+	<!-- I got the idea for how to do this from https://www.thymeleaf.org/doc/articles/springsecurity.html -->
+		<div sec:authorize="isAuthenticated()">
+			<h4 th:inline="text">BannerID: [[${#httpServletRequest.remoteUser}]]</h4>
+			<form th:action="@{/logout}" method="post">
+				<input type="submit" value="Sign Out"/>
+			</form>
+		</div>
+		
+		<h1>Your Groups for the Survey - <span class="text-green" th:text=${surveyTitle}></span> have been formed!</h1>
+		<h3>Here are your Group details: </h3>
+		<hr/>
+
+		<p><strong>Survey ID:</strong> <span th:text=${surveyID}></span> | <strong>Survey Title:</strong> <span th:text=${surveyTitle}></span></p> 
+		
+		<table border="1">
+			<thead>
+				<tr>
+				<th>Student ID</th>
+				</tr>
+				<tr th:each="ques : *{studentList}">
+					<td th:text="${ques}"></td>
+				</tr> 
+		</table>
+		
+		<br />
+		
+		<table border="1">
+			<thead>
+				<tr>
+				<th>Student ID</th>
+				</tr>
+				<tr th:each="ques : *{groups}">
+					<td th:text="${ques}"></td>
+				</tr> 
+		</table>
+		
+		<hr/>
+		<br />
+		<button><a href="/">Back to Home</a></button>
+</body>
+</html>

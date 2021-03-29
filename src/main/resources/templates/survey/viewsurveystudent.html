@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+	<head>
+		<title>Student Survey</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</head>
+	<body>
+		
+
+<form action="" th:action="@{/survey/viewsurvey}" method="post">				
+				<p th:each="question: ${questionList}">				
+					<span th:text="${question.questionText}"></span>
+					<span th:if="${question.questionType=='MCQOne'}">
+					<select id="mcq" name="mcq" >
+						<span th:each="option:  ${questionOptions}" >	
+						<span th:if="${question.questionID == option.id}">
+							<option  th:value="${option.storedAs}" th:text="${option.displayText}" />
+						</select>
+						</span>	
+						</span>						
+					</span>
+					
+						<span th:if="${question.questionType=='MCQMultiple'}" >
+						<span th:each="option : ${questionOptions}">
+						<span th:if="${question.questionID == option.id }">
+							<input type="checkbox" th:value="${option.storedAs}" th:text="${option.displayText}">
+							<label th:text:="${option.displayText}"></label> <br/>
+						</span>	
+						</span>					
+						</span>		
+					
+								
+					<span th:if="${question.questionType=='Text'}">
+						<textarea name="${question.questionID}" rows="3" cols="20" ></textarea>
+					</span>
+					
+					<span th:if="${question.questionType=='Numeric'}">
+						<input type="number" name="${question.questionID}" />
+				
+					</span>
+				</p>
+				<p>
+					<input type="submit" value="Submit" />
+					<input type="reset" value="Reset" />
+				</p>
+			</form>
+	</body>
+</html>

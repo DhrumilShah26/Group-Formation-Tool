@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+tr{padding: 10px;}
+</style>
+<meta charset="UTF-8">
+<title>Published Survey - <span th:text=${surveyTitle}></span></title>
+</head>
+<body>
+	<!-- I got the idea for how to do this from https://www.thymeleaf.org/doc/articles/springsecurity.html -->
+		<div sec:authorize="isAuthenticated()">
+			<h4 th:inline="text">BannerID: [[${#httpServletRequest.remoteUser}]]</h4>
+			<form th:action="@{/logout}" method="post">
+				<input type="submit" value="Sign Out"/>
+			</form>
+		</div>
+		
+		<h1>Your Survey - <span th:text=${surveyTitle}></span> has been published!</h1>
+		<h3>Here are your survey details: </h3>
+		<hr/>
+
+		<p><strong>Survey ID:</strong> <span th:text=${surveyID}></span> | <strong>Survey Title:</strong> <span th:text=${surveyTitle}></span></p> 
+		<table border="1" th:object="${surveyQuestion}">
+			<thead>
+				<tr>
+				<th>Question ID</th>
+				</tr>
+				<tr th:each="ques : *{questionIdList}">
+					<td th:text="${ques}"></td>
+				</tr> 
+		</table>
+		<br/>
+		<form th:action="@{/survey/formgroups}">
+			<input type="hidden" th:value="${surveyID}" name="surveyID" />
+			<input type="hidden" th:value="${surveyTitle}" name="surveyTitle" />
+			<input type="hidden" th:value="${courseID}" name="courseID" />
+			Enter Group Size:
+			<input type="number" th:value="${groupsize}" name="groupsize">
+			<button type="submit">Form Groups</button>
+		</form>
+		<br />
+		<hr/>
+		<br />
+		<button><a href="/">Back to Home</a></button>
+</body>
+</html>

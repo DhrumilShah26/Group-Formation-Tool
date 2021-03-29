@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+	<head>
+		<title>CSCI5308 - Group Formation Tool</title>
+		<link th:href="@{/styles/cssandjs/main.css}" rel="stylesheet" />
+	</head>
+	<body>
+		<!-- I got the idea for how to do this from https://www.thymeleaf.org/doc/articles/springsecurity.html -->
+		<div sec:authorize="isAuthenticated()">
+			<h4 th:inline="text">BannerID: [[${#httpServletRequest.remoteUser}]]</h4>
+			<form th:action="@{/logout}" method="post">
+				<input type="submit" value="Sign Out"/>
+			</form>
+		</div>
+
+<h1>Create Survey</h1>
+<p>Survey ID: <span th:text=${surveyID}></span></p>
+<p>Survey Title: <span th:text=${surveyTitle}></span></p>
+<p class="bg-error" th:if="${error}" th:text="${error}"></p>
+<p class="bg-error" th:if="${errorStatus}" th:text="${errorStatus}"></p>
+
+		<form th:action="@{/survey/savesurvey}" method="POST">
+		<input type="hidden" name="surveyTitle" th:value="${surveyTitle}" />
+		<input type="hidden" name="surveyID" th:value="${surveyID}" />
+		<input type="hidden" name="bannerID" th:value="${bannerID}" />
+		<input type="hidden" name="courseID" th:value="${courseID}" />
+		<table border="1" th:object="${surveyQuestion}">
+			<thead>
+				<tr><th colspan="4">Group Formation Rules</th></tr>
+				<tr><th colspan="4">Group Size: <input type="number" name="group-size" th:value=${groupsize} /></th></tr>
+				<tr>
+				<th>Question ID</th>
+				<th>Similarity</th>
+				<th>Weightage/Reward</th>
+				<th>Action</th>
+				</tr>
+				<tr th:each="ques : *{questionIdList}">
+					<td th:text="${ques}"></td>
+					<input type="hidden" name="questionid" th:value="${ques}" />
+					<td>
+						<select name="rulesimilarity" id="rule-similarity">
+						  <option value="similar">similar</option>
+						  <option value="dissimilar">dissimilar</option>
+						</select>
+					</td>
+					<td><input type="number" name="reward"/></td>
+					<td>
+						<input name="rmquestionid" type="checkbox" onchange="document.getElementById('rmQuestion').disabled = !this.checked;" th:value="${ques}" />
+					</td>
+				</tr> 
+		</table>
+		<br />
+		<button type="submit" id="rmQuestion" name="removeQuestion" disabled>Remove Selected from Survey</button><br /><br />
+		<button type="submit" name="saveAsDraft">Save As Draft</button><br /><br />
+		<button type="submit" name="publishSurvey" onclick="return confirm('Are you sure you want to Publish? Once published, the Survey will no longer be editable!')">Publish Survey</button>
+		</form>
+		<br />
+		<hr />
+<h2>Question Bank - <small>Select Questions to Add To Survey</small></h2>
+
+	<form th:action="@{/survey/addquestion}" method="POST">		
+		<input type="hidden" name="surveyTitle" th:value="${surveyTitle}" />
+		<input type="hidden" name="surveyID" th:value="${surveyID}" />
+		<input type="hidden" name="bannerID" th:value="${bannerID}" />
+		<input type="hidden" name="courseID" th:value="${courseID}" />
+		<input type="hidden" name="groupsize" th:value="${groupsize}" />
+		<table border="1">
+			<thead>
+				<tr>
+				<th>Question ID</th>
+				<th>Title</th>
+				<th>Text</th>
+				<th>Type</th>
+				<th>Created</th>
+				<th>Action</th>
+				</tr>
+				<tr th:each="val: ${questionBank}">
+					<td>
+						<span id="q-id" th:text="${val.id}"></span>
+					</td>
+					<td>
+						<span id="q-title" th:text="${val.title}"></span>
+					</td>
+					<td>
+						<span th:text="${val.text}"></span>
+					</td>
+					<td>
+						<span th:text="${val.type}"></span>
+					</td>
+					<td>
+						<span th:text="${val.timestamp}"></span>
+					</td>
+					<td>
+						<input name="questionid" type="checkbox" onchange="document.getElementById('addQuestion').disabled = !this.checked;" th:value="${val.id}" />
+					</td>
+				<tr>
+		</table>
+		<br />
+		<button type="submit" id="addQuestion" name="addSurveyQuestion" disabled>Add To Survey</button>
+	</form>
+</body>
+</html>
